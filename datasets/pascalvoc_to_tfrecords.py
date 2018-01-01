@@ -80,7 +80,7 @@ def _process_image(directory, name):
     """
     # Read the image file.
     filename = directory + DIRECTORY_IMAGES + name + '.jpg'
-    image_data = tf.gfile.FastGFile(filename, 'r').read()
+    image_data = tf.gfile.FastGFile(filename, 'rb').read()
 
     # Read the XML annotation file.
     filename = os.path.join(directory, DIRECTORY_ANNOTATIONS, name + '.xml')
@@ -173,8 +173,7 @@ def _add_to_tfrecord(dataset_dir, name, tfrecord_writer):
       name: Image name to add to the TFRecord;
       tfrecord_writer: The TFRecord writer to use for writing.
     """
-    image_data, shape, bboxes, labels, labels_text, difficult, truncated = \
-        _process_image(dataset_dir, name)
+    image_data, shape, bboxes, labels, labels_text, difficult, truncated = _process_image(dataset_dir, name)
     example = _convert_to_example(image_data, labels, labels_text,
                                   bboxes, shape, difficult, truncated)
     tfrecord_writer.write(example.SerializeToString())
